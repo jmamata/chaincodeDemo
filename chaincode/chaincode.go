@@ -17,10 +17,6 @@ limitations under the License.
 package main
 
 import (
-	"encoding/base64"
-	"errors"
-	"fmt"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/core/crypto/primitives"
 	"github.com/op/go-logging"
