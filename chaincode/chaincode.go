@@ -3,6 +3,7 @@ package main
 import(
 	"fmt"
 	"errors"
+	"encoding/json"
 	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
