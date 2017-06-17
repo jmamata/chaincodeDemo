@@ -3,7 +3,7 @@ package main
 import(
 	"fmt"
 	"errors"
-	
+	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -58,7 +58,22 @@ func main() {
 
 func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
+	if len(args) != 4 { 
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	}
 
+	patient = Patient{args[0],args[1],args[2],args[3]}
+	bytes, err := json.Marshal(patient)
+
+	if err != nil { 
+		return nil, errors.New("Error converting Patient record")
+	}
+
+	err = stub.PutState(PREFIX_PATIENT + args[0], bytes)
+
+	if err != nil { 
+		return nil, errors.New("Error storing Patient record") 
+	}
 
 	return nil, nil
 }
