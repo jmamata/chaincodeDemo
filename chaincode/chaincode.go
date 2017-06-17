@@ -59,23 +59,7 @@ func main() {
 
 func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface, args []string) (bool, error) {
 
-	if len(args) != 4 { 
-		return false, errors.New("Incorrect number of arguments. Expecting 1")
-	}
 
-	patient = Patient{args[0],args[1],args[2],args[3]}
-	bytes, err := json.Marshal(patient)
-
-	if err != nil { 
-		fmt.Printf("SAVE_CHANGES: Error converting Patient record: %s", err); 
-		return false, errors.New("Error converting Patient record")
-	}
-
-	err = stub.PutState(PREFIX_PATIENT + args[0], bytes)
-
-	if err != nil { 
-		fmt.Printf("SAVE_CHANGES: Error storing Patient record: %s", err); 
-		return false, errors.New("Error storing Patient record") 
 	}
 
 	return true, nil
