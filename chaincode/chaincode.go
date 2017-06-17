@@ -62,8 +62,9 @@ func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
+	var patient Patient
 	patient = Patient{args[0],args[1],args[2],args[3]}
-	bytes, err := json.Marshal(patient)
+	bytes, err := json.Marshal(&patient)
 
 	if err != nil { 
 		return nil, errors.New("Error converting Patient record")
