@@ -56,11 +56,11 @@ func main() {
 
 
 
-func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface, args []string) (bool, error) {
+func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 
 
-	return true, nil
+	return nil, nil
 }
 
 
