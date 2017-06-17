@@ -60,7 +60,6 @@ func main() {
 func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface, args []string) (bool, error) {
 
 
-	}
 
 	return true, nil
 }
