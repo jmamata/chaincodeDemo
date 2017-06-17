@@ -130,7 +130,7 @@ func (t *SimpleChaincode) enter_patient_prescription(stub shim.ChaincodeStubInte
  	err = json.Unmarshal(bytes,&patient)
  	patient.Prescriptions = append(patient.Prescriptions, prescription)
 
-	bytes, err := json.Marshal(&patient)
+	bytes, err = json.Marshal(&patient)
 	if err != nil { 
 		return nil, errors.New("Error converting Patient record") 
 	}
