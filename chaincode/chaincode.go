@@ -66,5 +66,15 @@ func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface
 
 func (t *SimpleChaincode) get_patient_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
-	return nil, nil
+	if len(args) != 1 { 
+		return false, errors.New("Incorrect number of arguments. Expecting 1")
+	}
+
+	patient, err := stub.GetState(PREFIX_PATIENT + args[0])
+	if err != nil {
+		jsonResp = "{\"Error\":\"Failed to get state for " + args[0] + "\"}"
+		return nil, errors.New(jsonResp)
+	}
+
+	return patient, nil
 }
