@@ -21,11 +21,18 @@ type Prescription  struct {
 type Patient struct {
 	Name            	string 			`json:"name"`
 	dob           		string 			`json:"dob"`
-	CurrentProblem      string 			`json:"currentproblem"`
+	CurrentProblem          string 			`json:"currentproblem"`
 	allergies      		string 			`json:"currentproblem"`
-	Prescriptions 		[]Prescription 	`json:"prescriptions"`
+	Prescriptions 		[]Prescription 	        `json:"prescriptions"`
+	Lab_Details             []Lab_Details           `json:"lab_details"`
 }
-
+type Lab_Details struct{
+	Name_Lab  	  	string  `json:"name_lab"`
+	Report_Type 	  	string  `json:"report_type"`
+	Date       	   	string  `json:"date"`
+	Impressions 		string  `json:"impressions"`
+	Findings      	 	string  `json:"findings"`
+}
 
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
     return nil, nil
@@ -45,7 +52,10 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.enter_patient_details(stub, args)
 	}else if function == "enter_patient_prescription" {
 		return t.enter_patient_prescription(stub, args)
+	}else if function == "enter_lab_details" {
+		return t.enter_lab_details(stub, args)
 	}
+	
 
 	return nil, errors.New("Received unknown function invocation " + function)
    
@@ -106,6 +116,44 @@ func (t *SimpleChaincode) get_patient_details(stub shim.ChaincodeStubInterface, 
 	return patient, nil
 }
 
+func (t *SimpleChaincode) enter_lab_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+
+	//	    0              1		   2		  3             4            5
+  	//	   Name       Name_Lab        Report_Type        Date      Impressions    Findings
+
+	if len(args) != 6 { 
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
+	}
+
+	bytes, err := stub.GetState(PREFIX_PATIENT + args[0])
+	if err != nil { 
+		return nil, errors.New("No Patient with name " + args[0])
+	}
+
+
+lab_details := Lab_Details{}
+	lab_details.Name_Lab = args[1]
+	lab_details.Report_Type = args[2]
+	lab_details.Date = args[3]
+	lab_details.Impressions = args[4]
+	lab_details.Findings = args[5]
+
+	var patient Patient
+ 	err = json.Unmarshal(bytes,&patient)
+ 	patient.Lab_Details = append(patient.Lab_Details, lab_details)
+
+	bytes, err = json.Marshal(&patient)
+	if err != nil { 
+		return nil, errors.New("Error converting Patient record") 
+	}
+
+	err = stub.PutState(PREFIX_PATIENT + args[0], bytes)
+	if err != nil { 
+		return nil, errors.New("Error storing Patient record") 
+	}
+
+	return nil, nil
+}
 func (t *SimpleChaincode) enter_patient_prescription(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	//		0		 1		   2		  3
