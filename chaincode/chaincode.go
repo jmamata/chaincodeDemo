@@ -40,7 +40,19 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
  
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "get_patient_details" {
-		return t.get_patient_details(stub, args)
+		//return t.get_patient_details(stub, args)
+		keysItr,err :=stub.RangeQueryState("","")
+		if err !=nil {
+			return nil,fmt.Errorf("Keys operation failed. Error accessing state: %s",err)
+		}
+		defer keysIter.Close()
+		i := 0
+		for keysIter.HasNext(){
+			i = i + 1
+		}
+		return i,nil
+		
+		
 	}
 
 	return nil, errors.New("Received unknown function invocation " + function)
