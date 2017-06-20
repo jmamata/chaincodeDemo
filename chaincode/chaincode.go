@@ -40,19 +40,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
  
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "get_patient_details" {
-		//return t.get_patient_details(stub, args)
-		keysIter,err :=stub.RangeQueryState("","")
-		if err !=nil {
-			return nil,fmt.Errorf("Keys operation failed. Error accessing state: %s",err)
-		}
-		defer keysIter.Close()
-		i := 0
-		for keysIter.HasNext(){
-			i = i + 1
-		}
-		return i,nil
-		
-		
+		return t.get_patient_details(stub, args)	
 	}
 
 	return nil, errors.New("Received unknown function invocation " + function)
@@ -114,18 +102,29 @@ func (t *SimpleChaincode) enter_patient_details(stub shim.ChaincodeStubInterface
 }
 
 
-func (t *SimpleChaincode) get_patient_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *SimpleChaincode) get_patient_details(stub shim.ChaincodeStubInterface, args []string) (int, error) {
 
-	if len(args) != 1 { 
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
+	//if len(args) != 1 { 
+	//	return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	//}
 
-	patient, err := stub.GetState(PREFIX_PATIENT + args[0])
-	if err != nil {
-		return nil, errors.New("Failed to get state for " + args[0])
-	}
-
-	return patient, nil
+	//patient, err := stub.GetState(PREFIX_PATIENT + args[0])
+	//if err != nil {
+	//	return nil, errors.New("Failed to get state for " + args[0])
+	//}
+	
+	
+	keysIter,err :=stub.RangeQueryState("","")
+		if err !=nil {
+			return nil,fmt.Errorf("Keys operation failed. Error accessing state: %s",err)
+		}
+		defer keysIter.Close()
+		i := 0
+		for keysIter.HasNext(){
+			i = i + 1
+		}
+		return i,nil
+	//return patient, nil
 }
 
 func (t *SimpleChaincode) enter_lab_details(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
