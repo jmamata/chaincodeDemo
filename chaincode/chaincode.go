@@ -41,7 +41,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "get_patient_details" {
 		//return t.get_patient_details(stub, args)
-		keysItr,err :=stub.RangeQueryState("","")
+		keysIter,err :=stub.RangeQueryState("","")
 		if err !=nil {
 			return nil,fmt.Errorf("Keys operation failed. Error accessing state: %s",err)
 		}
